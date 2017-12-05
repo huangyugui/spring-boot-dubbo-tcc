@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <util:properties id="tccJdbc" location="classpath:tccjdbc.properties"/>
+
+    <bean class="org.mengyun.tcctransaction.spring.recover.DefaultRecoverConfig">
+        <property name="maxRetryCount" value="30"/>
+        <property name="recoverDuration" value="60"/>
+        <property name="cronExpression" value="0/30 * * * * ?"/>
+    </bean>
+
+    <!--<bean id="transactionRepository"-->
+          <!--class="org.mengyun.tcctransaction.spring.repository.SpringJdbcTransactionRepository">-->
+        <!--<property name="dataSource" ref="tccDataSource"/>-->
+        <!--<property name="domain" value="CAPITAL"/>-->
+        <!--<property name="tbSuffix" value="_CAP"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="tccDataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
+          <!--destroy-method="close" lazy-init="false">-->
+        <!--<property name="driverClassName" value="#{tccJdbc['jdbc.driverClassName']}"/>-->
+        <!--<property name="url" value="#{tccJdbc['tcc.jdbc.url']}"/>-->
+        <!--<property name="username" value="#{tccJdbc['jdbc.username']}"/>-->
+        <!--<property name="password" value="#{tccJdbc['jdbc.password']}"/>-->
+        <!--<property name="maxActive" value="20"/>-->
+        <!--<property name="initialSize" value="1"/>-->
+        <!--<property name="maxWait" value="60000"/>-->
+        <!--<property name="minIdle" value="1"/>-->
+
+        <!--<property name="validationQuery" value="SELECT 1"/>-->
+        <!--<property name="testOnBorrow" value="false"/>-->
+        <!--<property name="testOnReturn" value="false"/>-->
+        <!--<property name="minEvictableIdleTimeMillis" value="300000"/>-->
+        <!--<property name="testWhileIdle" value="true"/>-->
+        <!--<property name="timeBetweenEvictionRunsMillis" value="30000"/>-->
+        <!--<property name="maxOpenPreparedStatements" value="20"/>-->
+        <!--<property name="poolPreparedStatements" value="true"/>-->
+        <!--<property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>-->
+        <!--<property name="filters" value="stat,wall"/>-->
+    <!--</bean>-->
+
+    <bean id="transactionRepository" class="org.mengyun.tcctransaction.repository.RedisTransactionRepository">
+        <property name="keyPrefix" value="TCC:ORD:"/>
+        <property name="jedisPool" ref="jedisPool"/>
+    </bean>
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="1000"/>
+        <property name="maxWaitMillis" value="1000"/>
+    </bean>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1" value="192.168.3.234"/>
+        <constructor-arg index="2" value="6379" type="int"/>
+        <constructor-arg index="3" value="1000" type="int"/>
+        <constructor-arg index="4" type="java.lang.String">
+            <null/>
+        </constructor-arg>
+        <constructor-arg index="5" value="3" type="int"/>
+    </bean>
+</beans>

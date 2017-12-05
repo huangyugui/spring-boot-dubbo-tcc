@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="tcc-dubbo-redpacket"/>
+
+
+    <!--<dubbo:registry id="capitalRpcZk" address="multicast://224.5.6.7:1234?unicast=false"/>-->
+    <dubbo:registry id="redPacketRpcZk" protocol="zookeeper" register="true" subscribe="false"
+                    address="192.168.3.234:2181" session="180000"
+                    timeout="30000" file="./.dubbo/rpc-cache"/>
+
+    <dubbo:protocol name="dubbo" port="2881" payload="52428800"/>
+
+    <dubbo:service interface="com.eadydb.tcc.redpacket.service.RedPacketTradeOrderService"
+                   registry="redPacketRpcZk"
+                   ref="redPacketTradeOrderService" timeout="60000" retries="0"/>
+
+    <dubbo:service interface="com.eadydb.tcc.redpacket.service.RedPacketAccountService"
+                   registry="redPacketRpcZk"
+                   ref="redPacketAccountService" timeout="60000" retries="0"/>
+    <!--<bean id="capitalTradeOrderService"-->
+    <!--class="org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl"/>-->
+
+</beans>

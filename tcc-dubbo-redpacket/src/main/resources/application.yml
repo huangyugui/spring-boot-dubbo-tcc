@@ -1,0 +1,81 @@
+logging:
+  config: classpath:logback.xml
+  path: /home/eadydb/DB2/Data/logs/tcc-dubbo-redpacket
+spring:
+  application:
+    name: tcc-dubbo-redpacket
+
+
+mybatis:
+  mapperLocations: classpath:/mybatis/mapper/*.xml
+  typeAliasesPackage: com.eadydb.tcc.redpacket.mapper
+  mapperScanPackage: com.eadydb.tcc.redpacket.mapper
+  configLocation: classpath:/mybatis/mybatis-config.xml
+
+mysql:
+  datasource:
+    readSize: 2
+    type: com.alibaba.druid.pool.DruidDataSource
+    mapperLocations: classpath:/mybatis/mapper/*.xml
+    configLocation: classpath:/mybatis/mybatis-config.xml
+    typeAliasesPackage: com.eadydb.tcc.redpacket.entity
+    write:
+       url: jdbc:mysql://192.168.3.234:3306/tcc_red?useUnicode=true&amp;characterEncoding=utf-8
+       username: sportcloud
+       password: GdssSP@#2017
+       driver-class-name: com.mysql.jdbc.Driver
+       minIdle: 5
+       maxActive: 100
+       initialSize: 10
+       maxWait: 60000
+       timeBetweenEvictionRunsMillis: 60000
+       minEvictableIdleTimeMillis: 300000
+       validationQuery: select 'x'
+       testWhileIdle: true
+       testOnBorrow: false
+       testOnReturn: false
+       poolPreparedStatements: true
+       maxPoolPreparedStatementPerConnectionSize: 50
+       removeAbandoned: true
+       filters: stat
+    read01:
+       url: jdbc:mysql://192.168.3.233:3306/tcc_red?useUnicode=true&amp;characterEncoding=utf-8
+       username: sportcloud
+       password: GdssSP@#2017
+       driver-class-name: com.mysql.jdbc.Driver
+       minIdle: 5
+       maxActive: 100
+       initialSize: 10
+       maxWait: 60000
+       timeBetweenEvictionRunsMillis: 60000
+       minEvictableIdleTimeMillis: 300000
+       validationQuery: select 'x'
+       testWhileIdle: true
+       testOnBorrow: false
+       testOnReturn: false
+       poolPreparedStatements: true
+       maxPoolPreparedStatementPerConnectionSize: 50
+       removeAbandoned: true
+       filters: stat
+    read02:
+       url: jdbc:mysql://192.168.3.232:3306/tcc_red?useUnicode=true&amp;characterEncoding=utf-8
+       username: sportcloud
+       password: GdssSP@#2017
+       driver-class-name: com.mysql.jdbc.Driver
+       minIdle: 5
+       maxActive: 100
+       initialSize: 10
+       maxWait: 60000
+       timeBetweenEvictionRunsMillis: 60000
+       minEvictableIdleTimeMillis: 300000
+       validationQuery: select 'x'
+       testWhileIdle: true
+       testOnBorrow: false
+       testOnReturn: false
+       poolPreparedStatements: true
+       maxPoolPreparedStatementPerConnectionSize: 50
+       removeAbandoned: true
+       filters: stat
+server:
+  port: 8762
+
